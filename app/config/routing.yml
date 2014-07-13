@@ -1,0 +1,4 @@
+steam_boat:
+    resource: "@SteamBoatBundle/Resources/config/routing.yml"
+    prefix:   /
+

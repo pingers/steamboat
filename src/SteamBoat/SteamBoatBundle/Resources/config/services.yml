@@ -1,0 +1,7 @@
+parameters:
+#    steam_boat.example.class: SteamBoat\SteamBoatBundle\Example
+
+services:
+#    steam_boat.example:
+#        class: %steam_boat.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

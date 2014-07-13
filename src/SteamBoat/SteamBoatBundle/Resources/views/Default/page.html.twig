@@ -1,0 +1,18 @@
+{# src/SteamBoat/SteamBoatBundle/Resources/views/Default/page.html.twig #}
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+            <!--<link rel="stylesheet" href="style.css" />-->
+            <title>SteamBoat</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div id="content">{% block content %}{% endblock %}</div>
+        <div id="footer">
+            {% block footer %}
+                &copy; Copyright 2014 by <a href="http://github.com/pingers">Michael Priest</a>.
+            {% endblock %}
+        </div>
+    </body>
+</html>

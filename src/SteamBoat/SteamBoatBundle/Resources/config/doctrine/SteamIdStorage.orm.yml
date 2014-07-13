@@ -1,0 +1,45 @@
+SteamBoat\SteamBoatBundle\Entity\SteamIdStorage:
+    type: entity
+    table: null
+    repositoryClass: SteamBoat\SteamBoatBundle\Entity\SteamIdStorageRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        customUrl:
+            type: string
+            length: 256
+        fetchTime:
+            type: integer
+#        friends:
+#            type: array...
+#        games:
+#            type: array...
+        limited:
+            type: boolean
+        nickname:
+            type: string
+            length: 128
+#        playTimes:
+#            type: array...
+        steamId64:
+            type: string
+            length: 64
+        tradeBanState:
+            type: string
+            length: 64
+    manyToMany:
+        games:
+            targetEntity: SteamGameStorage
+            joinTable:
+                name: SteamIds_SteamGames
+                joinColumns:
+                    game_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    steamId_id:
+                        referencedColumnName: id
+    lifecycleCallbacks: {  }

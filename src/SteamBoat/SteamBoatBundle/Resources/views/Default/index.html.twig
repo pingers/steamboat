@@ -1,0 +1,23 @@
+{% extends "SteamBoatBundle:Default:page.html.twig" %}
+
+{% block content %}
+    <h1>SteamBoat</h1>
+    <p class="important">
+        <a href="http://steamcommunity.com/profiles/{{ id.getSteamId64 }}">
+            <span>{{ id.getNickname }}</span>
+        </a>
+    </p>
+    <p>
+    <table>
+{#{{ dump(steamId) }}#}
+        {% for game in games %}
+            <tr>
+                <td><a href="http://store.steampowered.com/app/{{ game.getAppId }}" target="_blank">
+                        <img src="{{ game.getLogoHash }}" alt="{{ game.getName }}"/>
+                    </a></td>
+                <td></td>
+            </tr>
+        {% endfor %}
+    </table>
+    </p>
+{% endblock %}

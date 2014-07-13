@@ -1,0 +1,3 @@
+steam_boat_homepage:
+    path:  /steam/{name}
+    defaults: { _controller: SteamBoatBundle:Default:index }

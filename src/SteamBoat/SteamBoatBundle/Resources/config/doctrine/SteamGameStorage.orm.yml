@@ -1,0 +1,23 @@
+SteamBoat\SteamBoatBundle\Entity\SteamGameStorage:
+    type: entity
+    table: null
+    repositoryClass: SteamBoat\SteamBoatBundle\Entity\SteamGameStorageRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        appId:
+            type: integer
+        logoHash:
+            type: string
+            length: 256
+        name:
+            type: string
+            length: 128
+        shortName:
+            type: string
+            length: 128
+    lifecycleCallbacks: {  }

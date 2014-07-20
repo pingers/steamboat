@@ -731,16 +731,16 @@
         },
         {
             "name": "koraktor/steam-condenser",
-            "version": "1.3.7",
+            "version": "1.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koraktor/steam-condenser-php.git",
-                "reference": "a4c66656982aacdc71eced6322f8242d2d28154b"
+                "reference": "754cee9e8248498e32dbfad3f8beccf42059f0f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koraktor/steam-condenser-php/zipball/a4c66656982aacdc71eced6322f8242d2d28154b",
-                "reference": "a4c66656982aacdc71eced6322f8242d2d28154b",
+                "url": "https://api.github.com/repos/koraktor/steam-condenser-php/zipball/754cee9e8248498e32dbfad3f8beccf42059f0f4",
+                "reference": "754cee9e8248498e32dbfad3f8beccf42059f0f4",
                 "shasum": ""
             },
             "require": {
@@ -773,7 +773,7 @@
                 "steam",
                 "webapi"
             ],
-            "time": "2013-10-16 05:14:32"
+            "time": "2014-07-15 05:36:05"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -1391,16 +1391,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.5.1",
+            "version": "v2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "e3d2844abc988bc467bb1593cd340700096b0ac0"
+                "reference": "e66ee967571b89234c90946fe0d50dad195ad29c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/e3d2844abc988bc467bb1593cd340700096b0ac0",
-                "reference": "e3d2844abc988bc467bb1593cd340700096b0ac0",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/e66ee967571b89234c90946fe0d50dad195ad29c",
+                "reference": "e66ee967571b89234c90946fe0d50dad195ad29c",
                 "shasum": ""
             },
             "require": {
@@ -1503,7 +1503,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2014-07-08 14:42:08"
+            "time": "2014-07-15 15:39:46"
         },
         {
             "name": "twig/extensions",

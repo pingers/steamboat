@@ -1,3 +1,6 @@
 steam_boat_homepage:
-    path:  /steam/{name}
+    path:  /steam
     defaults: { _controller: SteamBoatBundle:Default:index }
+steam_boat_list_games:
+    path:  /steam/{name}
+    defaults: { _controller: SteamBoatBundle:Default:listGames }

@@ -28,10 +28,10 @@ class SteamIdStorageRepository extends EntityRepository
         }
         // Fetch remotely.
         elseif ($steamId = SteamId::create($nickname)) {
-                if ($steamIdStorage = $this->createSteamIdStorage($steamId)) {
-                    // Cache in the database.
-                    $this->writeSteamIdStorage($steamIdStorage);
-                }
+            if ($steamIdStorage = $this->createSteamIdStorage($steamId)) {
+                // Cache in the database.
+                $this->writeSteamIdStorage($steamIdStorage);
+            }
         }
         return $steamIdStorage ? $steamIdStorage : null;
     }
@@ -56,10 +56,15 @@ class SteamIdStorageRepository extends EntityRepository
         $gameEm = $em->getRepository('SteamBoatBundle:SteamGameStorage');
         if ($games = $steamId->getGames()) {
             foreach ($games as $game) {
-                $steamIdStorage->addGame($gameEm->createSteamGameStorage($game));
+                // Check for existing game.
+                if ($existingGame = $gameEm->findOneByAppId($game->getAppId())) {
+                    $steamIdStorage->addGame($existingGame);
+                }
+                else {
+                    $steamIdStorage->addGame($gameEm->createSteamGameStorage($game));
+                }
             }
         }
-
 
         $em->persist($steamIdStorage);
         return $steamIdStorage;

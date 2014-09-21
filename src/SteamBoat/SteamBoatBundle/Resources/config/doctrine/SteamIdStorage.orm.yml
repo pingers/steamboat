@@ -37,9 +37,9 @@ SteamBoat\SteamBoatBundle\Entity\SteamIdStorage:
             joinTable:
                 name: SteamIds_SteamGames
                 joinColumns:
-                    game_id:
+                    steamId_id:
                         referencedColumnName: id
                 inverseJoinColumns:
-                    steamId_id:
+                    game_id:
                         referencedColumnName: id
     lifecycleCallbacks: {  }

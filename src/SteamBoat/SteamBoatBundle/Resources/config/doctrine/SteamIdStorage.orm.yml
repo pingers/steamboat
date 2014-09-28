@@ -16,8 +16,6 @@ SteamBoat\SteamBoatBundle\Entity\SteamIdStorage:
             type: integer
 #        friends:
 #            type: array...
-#        games:
-#            type: array...
         limited:
             type: boolean
         nickname:

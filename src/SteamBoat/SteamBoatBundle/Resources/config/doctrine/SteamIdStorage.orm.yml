@@ -2,6 +2,9 @@ SteamBoat\SteamBoatBundle\Entity\SteamIdStorage:
     type: entity
     table: null
     repositoryClass: SteamBoat\SteamBoatBundle\Entity\SteamIdStorageRepository
+    uniqueConstraints:
+        steamId64:
+            columns: steamId64
     id:
         id:
             type: integer

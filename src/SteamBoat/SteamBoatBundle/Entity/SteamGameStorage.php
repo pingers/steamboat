@@ -27,7 +27,7 @@ class SteamGameStorage
     /**
      * @var string
      */
-    private $logoHash;
+    private $logoUrl;
 
     /**
      * Get id
@@ -91,26 +91,26 @@ class SteamGameStorage
 
 
     /**
-     * Set logoHash
+     * Set logoUrl
      *
-     * @param string $logoHash
+     * @param string $logoUrl
      * @return SteamGameStorage
      */
-    public function setLogoHash($logoHash)
+    public function setLogoUrl($logoUrl)
     {
-        $this->logoHash = $logoHash;
+        $this->logoUrl = $logoUrl;
 
         return $this;
     }
 
     /**
-     * Get logoHash
+     * Get logoUrl
      *
      * @return string
      */
-    public function getLogoHash()
+    public function getLogoUrl()
     {
-        return $this->logoHash;
+        return $this->logoUrl;
     }
 
     /**
@@ -174,7 +174,7 @@ class SteamGameStorage
     /**
      * Get steamIdStorages
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getSteamIdStorages()
     {
@@ -212,7 +212,7 @@ class SteamGameStorage
     /**
      * Get steamIds
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getSteamIds()
     {

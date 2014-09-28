@@ -11,7 +11,7 @@ SteamBoat\SteamBoatBundle\Entity\SteamGameStorage:
     fields:
         appId:
             type: integer
-        logoHash:
+        logoUrl:
             type: string
             length: 256
         name:

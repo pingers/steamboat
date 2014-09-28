@@ -240,7 +240,7 @@ class SteamIdStorage
     /**
      * Get category
      *
-     * @return \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage 
+     * @return \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage
      */
     public function getCategory()
     {
@@ -273,7 +273,7 @@ class SteamIdStorage
     /**
      * Get games
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getGames()
     {

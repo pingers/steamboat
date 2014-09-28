@@ -12,7 +12,7 @@
         {% for game in games %}
             <tr>
                 <td><a href="http://store.steampowered.com/app/{{ game.getAppId }}" target="_blank">
-                        <img src="{{ game.getLogoHash }}" alt="{{ game.getName }}"/>
+                        <img src="{{ game.getLogoUrl }}" alt="{{ game.getName }}"/>
                     </a></td>
                 <td></td>
             </tr>

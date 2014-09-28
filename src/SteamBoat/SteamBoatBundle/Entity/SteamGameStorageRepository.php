@@ -41,7 +41,7 @@ class SteamGameStorageRepository extends EntityRepository
         // Map properties.
         $steamGameStorage->setName($steamGame->getName());
         $steamGameStorage->setAppId($steamGame->getAppId());
-        $steamGameStorage->setlogoHash($steamGame->getLogoUrl());
+        $steamGameStorage->setLogoUrl($steamGame->getLogoUrl());
 
         $shortName = $steamGame->getShortName() ? $steamGame->getShortName() : $steamGame->getName();
           $steamGameStorage->setShortName($shortName);

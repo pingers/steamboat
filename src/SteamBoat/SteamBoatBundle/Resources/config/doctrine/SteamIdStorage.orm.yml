@@ -30,6 +30,17 @@ SteamBoat\SteamBoatBundle\Entity\SteamIdStorage:
             type: string
             length: 64
     manyToMany:
+        friends:
+            targetEntity: SteamIdStorage
+            joinTable:
+                name: SteamIds_Friends
+                joinColumns:
+                    steamId_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    friend_id:
+                        referencedColumnName: id
+    manyToMany:
         games:
             targetEntity: SteamGameStorage
             joinTable:

@@ -248,26 +248,26 @@ class SteamIdStorage
     }
 
     /**
-     * Add games
+     * Add game
      *
-     * @param \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $games
+     * @param \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $game
      * @return SteamIdStorage
      */
-    public function addGame(\SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $games)
+    public function addGame(\SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $game)
     {
-        $this->games[] = $games;
+        $this->games[] = $game;
 
         return $this;
     }
 
     /**
-     * Remove games
+     * Remove game
      *
-     * @param \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $games
+     * @param \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $game
      */
-    public function removeGame(\SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $games)
+    public function removeGame(\SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $game)
     {
-        $this->games->removeElement($games);
+        $this->games->removeElement($game);
     }
 
     /**
@@ -278,5 +278,38 @@ class SteamIdStorage
     public function getGames()
     {
         return $this->games;
+    }
+
+    /**
+     * Add friends
+     *
+     * @param \SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $friends
+     * @return SteamIdStorage
+     */
+    public function addFriend(\SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $friends)
+    {
+        $this->friends[] = $friends;
+
+        return $this;
+    }
+
+    /**
+     * Remove friends
+     *
+     * @param \SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $friends
+     */
+    public function removeFriend(\SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $friends)
+    {
+        $this->friends->removeElement($friends);
+    }
+
+    /**
+     * Get friends
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFriends()
+    {
+        return $this->friends;
     }
 }

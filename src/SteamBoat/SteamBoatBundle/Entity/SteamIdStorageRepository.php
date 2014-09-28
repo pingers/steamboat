@@ -52,19 +52,7 @@ class SteamIdStorageRepository extends EntityRepository
         $steamIdStorage->setSteamId64($steamId->getSteamId64());
         $steamIdStorage->setTradeBanState($steamId->getTradeBanState());
 
-        // Map games.
-        $gameEm = $em->getRepository('SteamBoatBundle:SteamGameStorage');
-        if ($games = $steamId->getGames()) {
-            foreach ($games as $game) {
-                // Check for existing game.
-                if ($existingGame = $gameEm->findOneByAppId($game->getAppId())) {
-                    $steamIdStorage->addGame($existingGame);
-                }
-                else {
-                    $steamIdStorage->addGame($gameEm->createSteamGameStorage($game));
-                }
-            }
-        }
+        $this->addGames($steamIdStorage, $steamId->getGames());
 
         $em->persist($steamIdStorage);
         return $steamIdStorage;
@@ -78,6 +66,30 @@ class SteamIdStorageRepository extends EntityRepository
         // Cache the steamId in the database.
         $em = $this->getEntityManager();
         $em->flush();
+        return $steamIdStorage;
+    }
+
+    /**
+     * @param $steamIdStorage
+     * @param $games
+     * @return object|null
+     */
+    public function addGames($steamIdStorage, $games) {
+        $em = $this->getEntityManager();
+
+        // Map games.
+        $gameEm = $em->getRepository('SteamBoatBundle:SteamGameStorage');
+        if ($games) {
+            foreach ($games as $game) {
+                // Check for existing game.
+                if ($existingGame = $gameEm->findOneByAppId($game->getAppId())) {
+                    $steamIdStorage->addGame($existingGame);
+                }
+                else {
+                    $steamIdStorage->addGame($gameEm->createSteamGameStorage($game));
+                }
+            }
+        }
         return $steamIdStorage;
     }
 }

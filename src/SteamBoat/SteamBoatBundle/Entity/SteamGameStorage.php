@@ -27,7 +27,7 @@ class SteamGameStorage
     /**
      * @var string
      */
-    private $logoUrl;
+    private $logoUrl = null;
 
     /**
      * Get id

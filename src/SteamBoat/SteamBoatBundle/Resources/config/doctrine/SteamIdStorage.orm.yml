@@ -17,8 +17,6 @@ SteamBoat\SteamBoatBundle\Entity\SteamIdStorage:
             length: 256
         fetchTime:
             type: integer
-#        friends:
-#            type: array...
         limited:
             type: boolean
         nickname:
@@ -43,7 +41,6 @@ SteamBoat\SteamBoatBundle\Entity\SteamIdStorage:
                 inverseJoinColumns:
                     friend_id:
                         referencedColumnName: id
-    manyToMany:
         games:
             targetEntity: SteamGameStorage
             joinTable:

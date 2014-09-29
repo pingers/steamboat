@@ -3,7 +3,7 @@
 namespace SteamBoat\SteamBoatBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use SteamGame;
+use SteamCondenser\Community\SteamGame;
 
 /**
  * SteamGameStorageRepository

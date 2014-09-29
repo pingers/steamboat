@@ -26,14 +26,14 @@ class SteamIdStorage
     private $fetchTime;
 
     /**
-     * @var array
+     * @var ArrayCollection
      */
-    private $friends;
+    private $games;
 
     /**
      * @var ArrayCollection
      */
-    private $games;
+    private $friends;
 
     /**
      * @var boolean
@@ -69,6 +69,7 @@ class SteamIdStorage
      */
     public function __construct() {
         $this->games = new ArrayCollection();
+        $this->friends = new ArrayCollection();
     }
 
     /**
@@ -248,26 +249,26 @@ class SteamIdStorage
     }
 
     /**
-     * Add game
+     * Add games
      *
-     * @param \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $game
+     * @param \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $games
      * @return SteamIdStorage
      */
-    public function addGame(\SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $game)
+    public function addGame(\SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $games)
     {
-        $this->games[] = $game;
+        $this->games[] = $games;
 
         return $this;
     }
 
     /**
-     * Remove game
+     * Remove games
      *
-     * @param \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $game
+     * @param \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $games
      */
-    public function removeGame(\SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $game)
+    public function removeGame(\SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $games)
     {
-        $this->games->removeElement($game);
+        $this->games->removeElement($games);
     }
 
     /**

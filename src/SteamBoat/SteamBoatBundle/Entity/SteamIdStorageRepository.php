@@ -3,7 +3,7 @@
 namespace SteamBoat\SteamBoatBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use SteamId;
+use SteamCondenser\Community\SteamId;
 
 /**
  * SteamIdStorageRepository
@@ -14,7 +14,7 @@ use SteamId;
 class SteamIdStorageRepository extends EntityRepository
 {
 /**
- * Retrieve a SteamId by Nickname.
+ * Retrieve a SteamId by Nickname. Fetches friends.
  *
  * @param $nickname
  * @return object|null
@@ -28,7 +28,7 @@ class SteamIdStorageRepository extends EntityRepository
         }
         // Fetch remotely.
         elseif ($steamId = SteamId::create($nickname)) {
-            if ($steamIdStorage = $this->createSteamIdStorage($steamId)) {
+            if ($steamIdStorage = $this->createSteamIdStorage($steamId, TRUE)) {
                 // Cache in the database.
                 $this->writeSteamIdStorage($steamIdStorage);
             }
@@ -36,11 +36,39 @@ class SteamIdStorageRepository extends EntityRepository
         return $steamIdStorage ? $steamIdStorage : null;
     }
 
+/**
+ * Retrieve a SteamId by SteamId64. Does not fetch friends by default.
+ *
+ * @param $steamId64
+ * @return object|null
+ */
+    public function findOneBySteamId64($steamId64) {
+        $steamIdStorage = null;
+
+        // Check local cache.
+        if ($steamIdStorage = $this->findOneBy(array('steamId64' => $steamId64))) {
+            return $steamIdStorage;
+        }
+        // Fetch remotely.
+        try {
+            $steamId = SteamId::create($steamId64);
+        }
+        catch (SteamCondenserException $e) {
+            return null;
+        }
+        if ($steamIdStorage = $this->createSteamIdStorage($steamId)) {
+            // Cache in the database.
+            $this->writeSteamIdStorage($steamIdStorage);
+        }
+        return $steamIdStorage ? $steamIdStorage : null;
+    }
+
     /**
      * @param $steamId
+     * @param $fetchFriends
      * @return object|null
      */
-    public function createSteamIdStorage($steamId) {
+    public function createSteamIdStorage($steamId, $fetchFriends = FALSE) {
         $em = $this->getEntityManager();
 
         // Map the entity properties.
@@ -53,6 +81,11 @@ class SteamIdStorageRepository extends EntityRepository
         $steamIdStorage->setTradeBanState($steamId->getTradeBanState());
 
         $this->addGames($steamIdStorage, $steamId->getGames());
+
+        // Prevent recursively fetching friends of friends.
+        if ($fetchFriends) {
+            $this->addFriends($steamIdStorage, $steamId->getFriends());
+        }
 
         $em->persist($steamIdStorage);
         return $steamIdStorage;
@@ -74,7 +107,7 @@ class SteamIdStorageRepository extends EntityRepository
      * @param $games
      * @return object|null
      */
-    public function addGames($steamIdStorage, $games) {
+    public function addGames(&$steamIdStorage, $games) {
         $em = $this->getEntityManager();
 
         // Map games.
@@ -88,6 +121,30 @@ class SteamIdStorageRepository extends EntityRepository
                 else {
                     $steamIdStorage->addGame($gameEm->createSteamGameStorage($game));
                 }
+            }
+        }
+        return $steamIdStorage;
+    }
+
+    /**
+     * @param $steamIdStorage
+     * @param $friends
+     * @return object|null
+     */
+    public function addFriends(&$steamIdStorage, $friends) {
+        $em = $this->getEntityManager();
+
+        // Map games.
+        $SteamIdEm = $em->getRepository('SteamBoatBundle:SteamIdStorage');
+        if ($friends) {
+            foreach ($friends as $friend) {
+                // Check if we already know about this friend.
+//                if ($existingId = $SteamIdEm->findOneBySteamId64($friend->getId())) {
+//                    $steamIdStorage->addFriend($existingId);
+//                }
+//                else {
+//                    $steamIdStorage->addFriend($SteamIdEm->createSteamIdStorage($friend));
+//                }
             }
         }
         return $steamIdStorage;

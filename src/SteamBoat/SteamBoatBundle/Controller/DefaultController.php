@@ -4,7 +4,6 @@ namespace SteamBoat\SteamBoatBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use SteamId;
 
 class DefaultController extends Controller
 {

@@ -40,4 +40,16 @@ class DefaultController extends Controller
             'games' => $steamIdStorage->getGames(),
          ));
     }
+
+    public function listFriendsAction($name)
+    {
+        $repository = $this->getDoctrine()
+            ->getRepository('SteamBoatBundle:SteamIdStorage');
+        $steamIdStorage = $repository->findOneByNickname($name);
+
+        return $this->render('SteamBoatBundle:Default:listFriends.html.twig', array(
+            'id' => $steamIdStorage,
+            'friends' => $steamIdStorage->getFriends(),
+        ));
+    }
 }

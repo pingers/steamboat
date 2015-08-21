@@ -4,3 +4,6 @@ steam_boat_homepage:
 steam_boat_list_games:
     path:  /steam/{name}
     defaults: { _controller: SteamBoatBundle:Default:listGames }
+steam_boat_list_friends:
+    path:  /steam/{name}/friends
+    defaults: { _controller: SteamBoatBundle:Default:listFriends }

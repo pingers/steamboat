@@ -84,11 +84,6 @@ class SteamGameStorage
     {
         return $this->name;
     }
-    /**
-     * @var string
-     */
-    private $shortName;
-
 
     /**
      * Set logoUrl
@@ -113,28 +108,6 @@ class SteamGameStorage
         return $this->logoUrl;
     }
 
-    /**
-     * Set shortName
-     *
-     * @param string $shortName
-     * @return SteamGameStorage
-     */
-    public function setShortName($shortName)
-    {
-        $this->shortName = $shortName;
-
-        return $this;
-    }
-
-    /**
-     * Get shortName
-     *
-     * @return string
-     */
-    public function getShortName()
-    {
-        return $this->shortName;
-    }
     /**
      * @var \Doctrine\Common\Collections\Collection
      */

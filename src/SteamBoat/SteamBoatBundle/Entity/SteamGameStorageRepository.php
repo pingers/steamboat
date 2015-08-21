@@ -43,9 +43,6 @@ class SteamGameStorageRepository extends EntityRepository
         $steamGameStorage->setAppId($steamGame->getAppId());
         $steamGameStorage->setLogoUrl($steamGame->getLogoUrl());
 
-        $shortName = $steamGame->getShortName() ? $steamGame->getShortName() : $steamGame->getName();
-          $steamGameStorage->setShortName($shortName);
-
         $em = $this->getEntityManager();
         $em->persist($steamGameStorage);
         return $steamGameStorage;

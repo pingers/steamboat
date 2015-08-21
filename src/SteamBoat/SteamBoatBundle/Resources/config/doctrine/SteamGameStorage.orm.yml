@@ -18,7 +18,4 @@ SteamBoat\SteamBoatBundle\Entity\SteamGameStorage:
         name:
             type: string
             length: 128
-        shortName:
-            type: string
-            length: 128
     lifecycleCallbacks: {  }

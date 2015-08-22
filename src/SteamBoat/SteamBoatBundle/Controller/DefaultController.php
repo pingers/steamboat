@@ -29,11 +29,10 @@ class DefaultController extends Controller
         ));
     }
 
-    public function listGamesAction($name)
+    public function listGamesAction($nickname)
     {
-        $repository = $this->getDoctrine()
-          ->getRepository('SteamBoatBundle:SteamIdStorage');
-        $steamIdStorage = $repository->findOneByNickname($name);
+        $steamId = $this->get('steam_boat.steamid');
+        $steamIdStorage = $steamId->findOneByNickname($nickname);
 
         return $this->render('SteamBoatBundle:Default:listGames.html.twig', array(
             'id' => $steamIdStorage,
@@ -41,11 +40,11 @@ class DefaultController extends Controller
          ));
     }
 
-    public function listFriendsAction($name)
+    public function listFriendsAction($nickname)
     {
         $repository = $this->getDoctrine()
             ->getRepository('SteamBoatBundle:SteamIdStorage');
-        $steamIdStorage = $repository->findOneByNickname($name);
+        $steamIdStorage = $repository->findOneByNickname($nickname);
 
         return $this->render('SteamBoatBundle:Default:listFriends.html.twig', array(
             'id' => $steamIdStorage,

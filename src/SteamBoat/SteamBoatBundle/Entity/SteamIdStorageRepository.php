@@ -3,7 +3,7 @@
 namespace SteamBoat\SteamBoatBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use SteamCondenser\Community\SteamId;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  * SteamIdStorageRepository
@@ -13,6 +13,7 @@ use SteamCondenser\Community\SteamId;
  */
 class SteamIdStorageRepository extends EntityRepository
 {
+
 /**
  * Retrieve a SteamId by Nickname. Fetches friends.
  *
@@ -20,20 +21,10 @@ class SteamIdStorageRepository extends EntityRepository
  * @return object|null
  */
     public function findOneByNickname($nickname) {
-        $steamIdStorage = null;
-
         // Check local cache.
-        if ($steamIdStorage = $this->findOneBy(array('nickname' => $nickname))) {
-            return $steamIdStorage;
-        }
-        // Fetch remotely.
-        elseif ($steamId = SteamId::create($nickname)) {
-            if ($steamIdStorage = $this->createSteamIdStorage($steamId, TRUE)) {
-                // Cache in the database.
-                $this->writeSteamIdStorage($steamIdStorage);
-            }
-        }
-        return $steamIdStorage ? $steamIdStorage : null;
+        $steamIdStorage = $this->findOneBy(array('nickname' => $nickname));
+
+        return $steamIdStorage ?: null;
     }
 
 /**
@@ -43,24 +34,10 @@ class SteamIdStorageRepository extends EntityRepository
  * @return object|null
  */
     public function findOneBySteamId64($steamId64) {
-        $steamIdStorage = null;
-
         // Check local cache.
-        if ($steamIdStorage = $this->findOneBy(array('steamId64' => $steamId64))) {
-            return $steamIdStorage;
-        }
-        // Fetch remotely.
-        try {
-            $steamId = SteamId::create($steamId64);
-        }
-        catch (SteamCondenserException $e) {
-            return null;
-        }
-        if ($steamIdStorage = $this->createSteamIdStorage($steamId)) {
-            // Cache in the database.
-            $this->writeSteamIdStorage($steamIdStorage);
-        }
-        return $steamIdStorage ? $steamIdStorage : null;
+        $steamIdStorage = $this->findOneBy(array('steamId64' => $steamId64));
+
+        return $steamIdStorage ?: null;
     }
 
     /**

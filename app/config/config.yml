@@ -67,3 +67,7 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+steam_boat:
+    steam:
+        webapi_key: "%steam_webapi_key%"

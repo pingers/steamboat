@@ -8,7 +8,6 @@ use SteamCondenser\Community\SteamGame;
 use SteamCondenser\Community\SteamId as SteamIdFetcher;
 use SteamCondenser\Community\WebApi;
 use SteamCondenser\Exceptions\SteamCondenserException;
-use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
  * SteamId

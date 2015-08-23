@@ -95,7 +95,7 @@ class SteamIdStorageRepository extends EntityRepository
             foreach ($games as $game) {
                 // Check for existing game.
                 // @TODO Use array.
-                if ($existingGame = $gameEntityManager->findOneByAppId($game->getAppId())) {
+                if ($existingGame = $gameEntityManager->findOneByAppId($game['AppId'])) {
                     $steamIdStorage->addGame($existingGame);
                 }
                 else {

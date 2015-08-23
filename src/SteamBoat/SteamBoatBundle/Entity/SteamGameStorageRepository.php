@@ -28,23 +28,23 @@ class SteamGameStorageRepository extends EntityRepository
         if ($steamGame === null) {
             // Fetch remotely.
         }
-        return $steamGame ? $steamGame : null;
+        return $steamGame ?: null;
     }
 
     /**
      * @param SteamGame $steamGame
      * @return SteamGameStorage
      */
-    public function createSteamGameStorage(SteamGame $steamGame) {
+    public function createSteamGameStorage($steamGameData) {
         $steamGameStorage = new SteamGameStorage();
 
         // Map properties.
-        $steamGameStorage->setName($steamGame->getName());
-        $steamGameStorage->setAppId($steamGame->getAppId());
-        $steamGameStorage->setLogoUrl($steamGame->getLogoUrl());
+        foreach ($steamGameData as $property => $value) {
+            $steamGameStorage->{'set' . $property}($value);
+        }
 
-        $em = $this->getEntityManager();
-        $em->persist($steamGameStorage);
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($steamGameStorage);
         return $steamGameStorage;
     }
 }

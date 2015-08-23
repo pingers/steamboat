@@ -4,6 +4,7 @@ namespace SteamBoat\SteamBoatBundle\Service;
 
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use SteamCondenser\Community\SteamGame;
 use SteamCondenser\Community\SteamId as SteamIdFetcher;
 use SteamCondenser\Community\WebApi;
 use SteamCondenser\Exceptions\SteamCondenserException;
@@ -79,6 +80,13 @@ class SteamId
     }
 
     function createSteamIdData($steamId) {
+        // Fetch and format game data.
+        $steamGamesData = [];
+        $games = $steamId->getGames();
+        foreach ($games as $game) {
+            $steamGamesData[] = $this->createSteamGameData($game);
+        }
+
         // Map the entity properties.
         $steamIdData = [
             'CustomUrl'     => $steamId->getCustomUrl(),
@@ -87,7 +95,7 @@ class SteamId
             'Nickname'      => $steamId->getNickname(),
             'SteamId64'     => $steamId->getSteamId64(),
             'TradeBanState' => $steamId->getTradeBanState(),
-            'Games'         => $steamId->getGames(),
+            'Games'         => $steamGamesData,
 //            'Friends' => $steamId->getFriends(),
         ];
         // Prevent recursively fetching friends of friends.
@@ -96,6 +104,20 @@ class SteamId
 //        }
 
         return $steamIdData;
+    }
+
+    /**
+     * @param SteamGame $steamGame
+     * @return array
+     */
+    public function createSteamGameData(SteamGame $steamGame) {
+        $steamGameData = [
+            'Name'    => $steamGame->getName(),
+            'AppId'   => $steamGame->getAppId(),
+            'LogoUrl' => $steamGame->getLogoUrl(),
+        ];
+
+        return $steamGameData;
     }
 
 }

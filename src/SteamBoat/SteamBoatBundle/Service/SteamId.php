@@ -41,7 +41,7 @@ class SteamId
         }
         // Fetch remotely.
         elseif ($steamId = SteamIdFetcher::create($nickname)) {
-            if ($steamIdStorage = $repository->createSteamIdStorage($steamId, TRUE)) {
+            if ($steamIdStorage = $repository->createSteamIdStorage($this->createSteamIdData($steamId), TRUE)) {
                 // Cache in the database.
                 $repository->writeSteamIdStorage($steamIdStorage);
             }
@@ -71,11 +71,31 @@ class SteamId
         catch (SteamCondenserException $e) {
             return null;
         }
-        if ($steamIdStorage = $repository->createSteamIdStorage($steamId)) {
+        if ($steamIdStorage = $repository->createSteamIdStorage($this->createSteamIdData($steamId))) {
             // Cache in the database.
             $repository->writeSteamIdStorage($steamIdStorage);
         }
         return $steamIdStorage ?: null;
+    }
+
+    function createSteamIdData($steamId) {
+        // Map the entity properties.
+        $steamIdData = [
+            'CustomUrl'     => $steamId->getCustomUrl(),
+            'FetchTime'     => $steamId->getFetchTime(),
+            'Limited'       => $steamId->isLimited(),
+            'Nickname'      => $steamId->getNickname(),
+            'SteamId64'     => $steamId->getSteamId64(),
+            'TradeBanState' => $steamId->getTradeBanState(),
+            'Games'         => $steamId->getGames(),
+//            'Friends' => $steamId->getFriends(),
+        ];
+        // Prevent recursively fetching friends of friends.
+//        if ($fetchFriends) {
+//            $this->addFriends($steamIdStorage, $steamId->getFriends());
+//        }
+
+        return $steamIdData;
     }
 
 }

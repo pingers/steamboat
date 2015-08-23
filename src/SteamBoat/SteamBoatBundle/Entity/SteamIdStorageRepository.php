@@ -45,26 +45,28 @@ class SteamIdStorageRepository extends EntityRepository
      * @param $fetchFriends
      * @return object|null
      */
-    public function createSteamIdStorage($steamId, $fetchFriends = FALSE) {
-        $em = $this->getEntityManager();
+    public function createSteamIdStorage($steamIdData, $fetchFriends = FALSE) {
+        $entityManager = $this->getEntityManager();
+
+        $relatedEntities = [
+            'Friends',
+            'Games',
+        ];
 
         // Map the entity properties.
         $steamIdStorage = new SteamIdStorage();
-        $steamIdStorage->setCustomUrl($steamId->getCustomUrl());
-        $steamIdStorage->setFetchTime($steamId->getFetchTime());
-        $steamIdStorage->setLimited($steamId->isLimited());
-        $steamIdStorage->setNickname($steamId->getNickname());
-        $steamIdStorage->setSteamId64($steamId->getSteamId64());
-        $steamIdStorage->setTradeBanState($steamId->getTradeBanState());
 
-        $this->addGames($steamIdStorage, $steamId->getGames());
-
-        // Prevent recursively fetching friends of friends.
-        if ($fetchFriends) {
-            $this->addFriends($steamIdStorage, $steamId->getFriends());
+        // Handle regular properties and related entities.
+        foreach ($steamIdData as $property => $value) {
+            if (in_array($property, $relatedEntities)) {
+                $this->{'add' . $property}($steamIdStorage, $value);
+            }
+            else {
+                $steamIdStorage->{'set' . $property}($value);
+            }
         }
 
-        $em->persist($steamIdStorage);
+        $entityManager->persist($steamIdStorage);
         return $steamIdStorage;
     }
 
@@ -74,8 +76,8 @@ class SteamIdStorageRepository extends EntityRepository
      */
     public function writeSteamIdStorage($steamIdStorage) {
         // Cache the steamId in the database.
-        $em = $this->getEntityManager();
-        $em->flush();
+        $entityManager = $this->getEntityManager();
+        $entityManager->flush();
         return $steamIdStorage;
     }
 
@@ -85,21 +87,23 @@ class SteamIdStorageRepository extends EntityRepository
      * @return object|null
      */
     public function addGames(&$steamIdStorage, $games) {
-        $em = $this->getEntityManager();
+        $entityManager = $this->getEntityManager();
 
         // Map games.
-        $gameEm = $em->getRepository('SteamBoatBundle:SteamGameStorage');
+        $gameEntityManager = $entityManager->getRepository('SteamBoatBundle:SteamGameStorage');
         if ($games) {
             foreach ($games as $game) {
                 // Check for existing game.
-                if ($existingGame = $gameEm->findOneByAppId($game->getAppId())) {
+                // @TODO Use array.
+                if ($existingGame = $gameEntityManager->findOneByAppId($game->getAppId())) {
                     $steamIdStorage->addGame($existingGame);
                 }
                 else {
-                    $steamIdStorage->addGame($gameEm->createSteamGameStorage($game));
+                    $steamIdStorage->addGame($gameEntityManager->createSteamGameStorage($game));
                 }
             }
         }
+
         return $steamIdStorage;
     }
 
@@ -109,10 +113,10 @@ class SteamIdStorageRepository extends EntityRepository
      * @return object|null
      */
     public function addFriends(&$steamIdStorage, $friends) {
-        $em = $this->getEntityManager();
+        $entityManager = $this->getEntityManager();
 
         // Map games.
-        $SteamIdEm = $em->getRepository('SteamBoatBundle:SteamIdStorage');
+        $SteamIdEm = $entityManager->getRepository('SteamBoatBundle:SteamIdStorage');
         if ($friends) {
             foreach ($friends as $friend) {
                 // Check if we already know about this friend.

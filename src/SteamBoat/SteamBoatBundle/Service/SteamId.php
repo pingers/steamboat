@@ -2,7 +2,6 @@
 
 namespace SteamBoat\SteamBoatBundle\Service;
 
-
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use SteamCondenser\Community\SteamGame;
 use SteamCondenser\Community\SteamId as SteamIdFetcher;
@@ -28,9 +27,10 @@ class SteamId
      * Retrieve a SteamId by Nickname. Fetches friends.
      *
      * @param $nickname
+     * @param $fetchFriends
      * @return object|null
      */
-    public function findOneByNickname($nickname) {
+    public function findOneByNickname($nickname, $fetchFriends = FALSE) {
         $steamIdStorage = null;
         $repository = $this->doctrine
           ->getRepository('SteamBoatBundle:SteamIdStorage');
@@ -41,7 +41,7 @@ class SteamId
         }
         // Fetch remotely.
         elseif ($steamId = SteamIdFetcher::create($nickname)) {
-            if ($steamIdStorage = $repository->createSteamIdStorage($this->createSteamIdData($steamId), TRUE)) {
+            if ($steamIdStorage = $repository->createSteamIdStorage($this->createSteamIdData($steamId, $fetchFriends))) {
                 // Cache in the database.
                 $repository->writeSteamIdStorage($steamIdStorage);
             }
@@ -53,9 +53,10 @@ class SteamId
      * Retrieve a SteamId by SteamId64. Does not fetch friends by default.
      *
      * @param $steamId64
+     * @param $fetchFriends
      * @return object|null
      */
-    public function findOneBySteamId64($steamId64) {
+    public function findOneBySteamId64($steamId64, $fetchFriends = FALSE) {
         $steamIdStorage = null;
         $repository = $this->doctrine
             ->getRepository('SteamBoatBundle:SteamIdStorage');
@@ -66,36 +67,43 @@ class SteamId
         }
         // Fetch remotely.
         try {
-            $steamId = SteamIdFetcher::create($steamId64);
+            $steamId = SteamIdFetcher::create($steamId64, TRUE, TRUE);
         }
         catch (SteamCondenserException $e) {
             return null;
         }
-        if ($steamIdStorage = $repository->createSteamIdStorage($this->createSteamIdData($steamId))) {
-            // Cache in the database.
-            $repository->writeSteamIdStorage($steamIdStorage);
-        }
+        $steamIdStorage = $repository->createSteamIdStorage($this->createSteamIdData($steamId, $fetchFriends));
         return $steamIdStorage ?: null;
     }
 
-    function createSteamIdData($steamId) {
+    function createSteamIdData($steamId, $fetchFriends = FALSE) {
         // Fetch and format game data.
         $steamGamesData = [];
-        $games = $steamId->getGames();
-        foreach ($games as $game) {
-            $steamGamesData[] = $this->createSteamGameData($game);
+        $friendsData = [];
+        if ($steamId->isPublic()) {
+            $games = $steamId->getGames();
+            foreach ($games as $game) {
+                $steamGamesData[] = $this->createSteamGameData($game);
+            }
+            if ($fetchFriends) {
+                $friends = $steamId->getFriends();
+                foreach ($friends as $friend) {
+                    $friendsData[$friend->getSteamId64()] = $friend->getSteamId64();
+                    $this->findOneBySteamId64($friend->getSteamId64(), false);
+                }
+            }
         }
 
         // Map the entity properties.
         $steamIdData = [
-            'CustomUrl'     => $steamId->getCustomUrl(),
+            'CustomUrl'     => $steamId->getCustomUrl() ? 'id/' . $steamId->getCustomUrl() : 'profiles/' . $steamId->getSteamId64(),
             'FetchTime'     => $steamId->getFetchTime(),
             'Limited'       => $steamId->isLimited(),
             'Nickname'      => $steamId->getNickname(),
             'SteamId64'     => $steamId->getSteamId64(),
             'TradeBanState' => $steamId->getTradeBanState(),
             'Games'         => $steamGamesData,
-//            'Friends' => $steamId->getFriends(),
+//            'Friends'       => $steamId->getFriends(),
         ];
         // Prevent recursively fetching friends of friends.
 //        if ($fetchFriends) {

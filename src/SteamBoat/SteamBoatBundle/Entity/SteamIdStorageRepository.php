@@ -42,10 +42,9 @@ class SteamIdStorageRepository extends EntityRepository
 
     /**
      * @param $steamId
-     * @param $fetchFriends
      * @return object|null
      */
-    public function createSteamIdStorage($steamIdData, $fetchFriends = FALSE) {
+    public function createSteamIdStorage($steamIdData) {
         $entityManager = $this->getEntityManager();
 
         $relatedEntities = [
@@ -90,19 +89,21 @@ class SteamIdStorageRepository extends EntityRepository
         $entityManager = $this->getEntityManager();
 
         // Map games.
-        $gameEntityManager = $entityManager->getRepository('SteamBoatBundle:SteamGameStorage');
+        $gameStorageRepository = $entityManager->getRepository('SteamBoatBundle:SteamGameStorage');
         if ($games) {
             foreach ($games as $game) {
                 // Check for existing game.
                 // @TODO Use array.
-                if ($existingGame = $gameEntityManager->findOneByAppId($game['AppId'])) {
+                if ($existingGame = $gameStorageRepository->findOneByAppId($game['AppId'])) {
                     $steamIdStorage->addGame($existingGame);
                 }
                 else {
-                    $steamIdStorage->addGame($gameEntityManager->createSteamGameStorage($game));
+                    $steamIdStorage->addGame($gameStorageRepository->createSteamGameStorage($game));
                 }
             }
         }
+        // Avoid race conditions where games are added multiple times by flushing regularly.
+        $gameStorageRepository->getEntityManager()->flush();
 
         return $steamIdStorage;
     }
@@ -120,12 +121,12 @@ class SteamIdStorageRepository extends EntityRepository
         if ($friends) {
             foreach ($friends as $friend) {
                 // Check if we already know about this friend.
-//                if ($existingId = $SteamIdEm->findOneBySteamId64($friend->getId())) {
-//                    $steamIdStorage->addFriend($existingId);
-//                }
-//                else {
-//                    $steamIdStorage->addFriend($SteamIdEm->createSteamIdStorage($friend));
-//                }
+                if ($existingId = $SteamIdEm->findOneBySteamId64($friend->getId())) {
+                    $steamIdStorage->addFriend($existingId);
+                }
+                else {
+                    $steamIdStorage->addFriend($SteamIdEm->createSteamIdStorage($friend));
+                }
             }
         }
         return $steamIdStorage;

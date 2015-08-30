@@ -32,7 +32,7 @@ class DefaultController extends Controller
     public function listGamesAction($nickname)
     {
         $steamId = $this->get('steam_boat.steamid');
-        $steamIdStorage = $steamId->findOneByNickname($nickname);
+        $steamIdStorage = $steamId->findOneByNickname($nickname, TRUE);
 
         return $this->render('SteamBoatBundle:Default:listGames.html.twig', array(
             'id' => $steamIdStorage,

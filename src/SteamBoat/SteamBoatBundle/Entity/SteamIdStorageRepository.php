@@ -114,20 +114,9 @@ class SteamIdStorageRepository extends EntityRepository
      * @return object|null
      */
     public function addFriends(&$steamIdStorage, $friends) {
-        $entityManager = $this->getEntityManager();
-
-        // Map games.
-        $SteamIdEm = $entityManager->getRepository('SteamBoatBundle:SteamIdStorage');
-        if ($friends) {
-            foreach ($friends as $friend) {
-                // Check if we already know about this friend.
-                if ($existingId = $SteamIdEm->findOneBySteamId64($friend->getId())) {
-                    $steamIdStorage->addFriend($existingId);
-                }
-                else {
-                    $steamIdStorage->addFriend($SteamIdEm->createSteamIdStorage($friend));
-                }
-            }
+        // Add friends.
+        foreach ($friends as $friend) {
+            $steamIdStorage->addFriend($friend);
         }
         return $steamIdStorage;
     }

@@ -88,8 +88,7 @@ class SteamId
             if ($fetchFriends) {
                 $friends = $steamId->getFriends();
                 foreach ($friends as $friend) {
-                    $friendsData[$friend->getSteamId64()] = $friend->getSteamId64();
-                    $this->findOneBySteamId64($friend->getSteamId64(), false);
+                    $friendsData[$friend->getSteamId64()] = $this->findOneBySteamId64($friend->getSteamId64(), false);
                 }
             }
         }
@@ -103,12 +102,8 @@ class SteamId
             'SteamId64'     => $steamId->getSteamId64(),
             'TradeBanState' => $steamId->getTradeBanState(),
             'Games'         => $steamGamesData,
-//            'Friends'       => $steamId->getFriends(),
+            'Friends'       => $friendsData,
         ];
-        // Prevent recursively fetching friends of friends.
-//        if ($fetchFriends) {
-//            $this->addFriends($steamIdStorage, $steamId->getFriends());
-//        }
 
         return $steamIdData;
     }

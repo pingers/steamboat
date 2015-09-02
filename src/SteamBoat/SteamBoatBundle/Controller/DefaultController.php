@@ -10,7 +10,7 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         $form = $this->createFormBuilder()
-            ->add('name', 'text')
+            ->add('nickname', 'text')
             ->add('Go', 'submit')
             ->getForm();
 
@@ -20,7 +20,7 @@ class DefaultController extends Controller
             $data = $form->getData();
             return $this->redirect($this->generateUrl(
                 'steam_boat_list_games',
-                array('name' => $data['name'])
+                array('nickname' => $data['nickname'])
             ));
         }
 

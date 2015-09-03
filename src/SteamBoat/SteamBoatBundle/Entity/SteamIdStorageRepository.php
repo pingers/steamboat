@@ -22,7 +22,7 @@ class SteamIdStorageRepository extends EntityRepository
  */
     public function findOneByNickname($nickname) {
         // Check local cache.
-        $steamIdStorage = $this->findOneBy(array('nickname' => $nickname));
+        $steamIdStorage = $this->findOneBy(['nickname' => $nickname]);
 
         return $steamIdStorage ?: null;
     }
@@ -35,7 +35,7 @@ class SteamIdStorageRepository extends EntityRepository
  */
     public function findOneBySteamId64($steamId64) {
         // Check local cache.
-        $steamIdStorage = $this->findOneBy(array('steamId64' => $steamId64));
+        $steamIdStorage = $this->findOneBy(['steamId64' => $steamId64]);
 
         return $steamIdStorage ?: null;
     }

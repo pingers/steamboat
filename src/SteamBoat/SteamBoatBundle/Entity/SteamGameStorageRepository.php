@@ -23,7 +23,7 @@ class SteamGameStorageRepository extends EntityRepository
     public function findOneByAppId($appId) {
         // Check local cache.
         $steamGame = $this->findOneBy(
-            array('appId' => $appId)
+            ['appId' => $appId]
         );
         if ($steamGame === null) {
             // Fetch remotely.

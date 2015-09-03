@@ -13,7 +13,7 @@ class SteamIdStorage
     /**
      * @var array
      */
-    private static $steamIds = array();
+    private static $steamIds = [];
 
     /**
      * @var string

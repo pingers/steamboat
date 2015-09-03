@@ -20,13 +20,13 @@ class DefaultController extends Controller
             $data = $form->getData();
             return $this->redirect($this->generateUrl(
                 'steam_boat_list_games',
-                array('nickname' => $data['nickname'])
+                ['nickname' => $data['nickname']]
             ));
         }
 
-        return $this->render('SteamBoatBundle:Default:index.html.twig', array(
+        return $this->render('SteamBoatBundle:Default:index.html.twig', [
             'form' => $form->createView(),
-        ));
+        ]);
     }
 
     public function listGamesAction($nickname)
@@ -34,21 +34,55 @@ class DefaultController extends Controller
         $steamId = $this->get('steam_boat.steamid');
         $steamIdStorage = $steamId->findOneByNickname($nickname, TRUE);
 
-        return $this->render('SteamBoatBundle:Default:listGames.html.twig', array(
+        return $this->render('SteamBoatBundle:Default:listGames.html.twig', [
             'id' => $steamIdStorage,
             'games' => $steamIdStorage->getGames(),
-         ));
+         ]);
     }
 
-    public function listFriendsAction($nickname)
+//    public function listFriendsAction($nickname)
+//    {
+//        $repository = $this->getDoctrine()
+//            ->getRepository('SteamBoatBundle:SteamIdStorage');
+//        $steamIdStorage = $repository->findOneByNickname($nickname);
+//
+//        return $this->render('SteamBoatBundle:Default:listFriends.html.twig', array(
+//            'id' => $steamIdStorage,
+//            'friends' => $steamIdStorage->getFriends(),
+//        ));
+//    }
+
+    public function listFriendsAction(Request $request, $nickname)
     {
         $repository = $this->getDoctrine()
             ->getRepository('SteamBoatBundle:SteamIdStorage');
         $steamIdStorage = $repository->findOneByNickname($nickname);
 
-        return $this->render('SteamBoatBundle:Default:listFriends.html.twig', array(
-            'id' => $steamIdStorage,
-            'friends' => $steamIdStorage->getFriends(),
-        ));
+        $friends = $steamIdStorage->getFriends();
+        $builder = $this->createFormBuilder()
+            ->add('Go', 'submit');
+
+        foreach ($friends as $friendIdStorage) {
+            $builder->add($friendIdStorage->getSteamId64(), 'checkbox', [
+                'label' => $friendIdStorage->getNickname(),
+                'required' => false,
+            ]);
+        }
+
+        $form = $builder->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $data = $form->getData();
+            return $this->redirect($this->generateUrl(
+                'steam_boat_list_games',
+                ['nickname' => $nickname]
+            ));
+        }
+
+        return $this->render('SteamBoatBundle:Default:index.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

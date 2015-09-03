@@ -144,4 +144,20 @@ class SteamId
         return $steamGameData;
     }
 
+    public function findCommonGames($steamId64, $friendsId64) {
+        // MYSQL?
+        $repository = $this->doctrine
+            ->getRepository('SteamBoatBundle:SteamIdStorage');
+
+//SELECT COUNT(idGames.game_id) AS count, idGames.game_id, games.name
+//FROM `SteamIdStorage` AS steamIds
+//LEFT JOIN `SteamIds_SteamGames` AS idGames ON steamIds.id = idGames.steamId_id
+//LEFT JOIN `SteamGameStorage` AS games ON idGames.game_id = games.id
+//WHERE steamIds.steamId64 IN (76561197994407102, 76561197990231263)
+//GROUP BY game_id
+//HAVING count > 1
+//ORDER BY count DESC, games.name
+
+    }
+
 }

@@ -40,23 +40,10 @@ class DefaultController extends Controller
          ]);
     }
 
-//    public function listFriendsAction($nickname)
-//    {
-//        $repository = $this->getDoctrine()
-//            ->getRepository('SteamBoatBundle:SteamIdStorage');
-//        $steamIdStorage = $repository->findOneByNickname($nickname);
-//
-//        return $this->render('SteamBoatBundle:Default:listFriends.html.twig', array(
-//            'id' => $steamIdStorage,
-//            'friends' => $steamIdStorage->getFriends(),
-//        ));
-//    }
-
     public function listFriendsAction(Request $request, $nickname)
     {
-        $repository = $this->getDoctrine()
-            ->getRepository('SteamBoatBundle:SteamIdStorage');
-        $steamIdStorage = $repository->findOneByNickname($nickname);
+        $steamId = $this->get('steam_boat.steamid');
+        $steamIdStorage = $steamId->findOneByNickname($nickname, TRUE);
 
         $friends = $steamIdStorage->getFriends();
         $builder = $this->createFormBuilder()
@@ -70,15 +57,18 @@ class DefaultController extends Controller
         }
 
         $form = $builder->getForm();
-
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $data = $form->getData();
-            return $this->redirect($this->generateUrl(
-                'steam_boat_list_games',
-                ['nickname' => $nickname]
-            ));
+            $selectedFriends = array_keys(array_filter($data, function($value) { return $value; }));
+            $commonGames = $steamId->findCommonGames($steamIdStorage->getSteamId64(), $selectedFriends);
+
+            return $this->render('SteamBoatBundle:Default:listGamesInCommon.html.twig', [
+                'id' => $steamIdStorage,
+                'selectedFriends' => $selectedFriends,
+                'commonGames' => $commonGames,
+            ]);
         }
 
         return $this->render('SteamBoatBundle:Default:index.html.twig', [

@@ -1,0 +1,36 @@
+{% extends "SteamBoatBundle:Default:page.html.twig" %}
+
+{% block content %}
+    <p class="important">
+        <a href="http://steamcommunity.com/profiles/{{ id.getSteamId64 }}">
+            <span>{{ id.getNickname }}</span>
+        </a>
+    </p>
+    <p>
+    <table>
+        {% for friend in selectedFriends %}
+            <tr>
+                <td>
+                    {{ friend }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <table>
+{#{{ dump(steamId) }}#}
+        {% for game in commonGames %}
+            <tr>
+                <td>
+                    {{ game.game_id }}
+                </td>
+                <td>
+                    {{ game.name }}
+                </td>
+                <td>
+                    {{ game.count }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </p>
+{% endblock %}

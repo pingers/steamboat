@@ -145,19 +145,29 @@ class SteamId
     }
 
     public function findCommonGames($steamId64, $friendsId64) {
-        // MYSQL?
-        $repository = $this->doctrine
-            ->getRepository('SteamBoatBundle:SteamIdStorage');
+        $parameters = array_merge([(int) $steamId64], $friendsId64);
+        $placeholders = implode(', ', array_fill(0, count($parameters), '?'));
 
-//SELECT COUNT(idGames.game_id) AS count, idGames.game_id, games.name
-//FROM `SteamIdStorage` AS steamIds
-//LEFT JOIN `SteamIds_SteamGames` AS idGames ON steamIds.id = idGames.steamId_id
-//LEFT JOIN `SteamGameStorage` AS games ON idGames.game_id = games.id
-//WHERE steamIds.steamId64 IN (76561197994407102, 76561197990231263)
-//GROUP BY game_id
-//HAVING count > 1
-//ORDER BY count DESC, games.name
+        // Generate the query.
+        $sql = <<<SQL
+SELECT COUNT(idGames.game_id) AS count, idGames.game_id, games.name
+FROM `SteamIdStorage` AS steamIds
+LEFT JOIN `SteamIds_SteamGames` AS idGames ON steamIds.id = idGames.steamId_id
+LEFT JOIN `SteamGameStorage` AS games ON idGames.game_id = games.id
+WHERE steamIds.steamId64 IN (%parameters%)
+GROUP BY game_id
+HAVING count > 1
+ORDER BY count DESC, games.name;
+SQL;
+        $sql = str_replace('%parameters%', $placeholders, $sql);
+        $statement = $this->doctrine->getManager()->getConnection()->prepare($sql);
+        foreach ($parameters as $key => $parameter) {
+            $statement->bindValue($key + 1, $parameter);
+        }
+        $statement->execute();
+        $results = $statement->fetchAll();
 
+        return $results;
     }
 
 }

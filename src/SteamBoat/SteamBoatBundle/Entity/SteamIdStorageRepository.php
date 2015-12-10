@@ -116,7 +116,9 @@ class SteamIdStorageRepository extends EntityRepository
     public function addFriends(&$steamIdStorage, $friends) {
         // Add friends.
         foreach ($friends as $friend) {
-            $steamIdStorage->addFriend($friend);
+            if (isset($friend)) {
+                $steamIdStorage->addFriend($friend);
+            }
         }
         return $steamIdStorage;
     }

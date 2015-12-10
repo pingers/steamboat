@@ -36,32 +36,21 @@ class SteamId
             ->getRepository('SteamBoatBundle:SteamIdStorage');
 
         // Check local cache.
-        if ($steamIdStorage = $repository->findOneByNickname($nickname)) {
-            // @TODO: Add friends if we don't have them yet.
-            if (!count($steamIdStorage->getFriends())) {
-                $steamId = SteamIdFetcher::create($steamIdStorage->getSteamId64(), true, true);
-                $friends = $steamId->getFriends();
-                foreach ($friends as $friend) {
-                    $exists = false;
-                    foreach ($steamIdStorage->getFriends() as $existingFriend) {
-                        if ($existingFriend->getSteamId64() == $friend->getSteamId64()) {
-                            $exists = true;
-                        }
-                    }
-                    if (!$exists) {
-                        if ($friendSteamId = $this->findOneBySteamId64($friend->getSteamId64(), false)) {
-                            $steamIdStorage->addFriend($friendSteamId);
-                        }
-                    }
-                }
-                $repository->writeSteamIdStorage($steamIdStorage);
-            }
+        if (($steamIdStorage = $repository->findOneByNickname($nickname)) ||
+          ($steamIdStorage = $repository->findOneBySteamId64($nickname))) {
+            // Add friends if we don't have them yet.
+            $this->addFriends($steamIdStorage);
 
             return $steamIdStorage;
         }
         // Fetch remotely.
         elseif ($steamId = SteamIdFetcher::create($nickname)) {
-            if ($steamIdStorage = $repository->createSteamIdStorage($this->createSteamIdData($steamId, $fetchFriends))) {
+            // Double check it doesn't exist locally because SteamIdFetcher will
+            // also find based on customUrl as opposed to nickname.
+            if ($steamIdStorage = $repository->findOneBySteamId64($steamId->getSteamId64())) {
+                // Do nothing, we have it cached.
+            }
+            elseif ($steamIdStorage = $repository->createSteamIdStorage($this->createSteamIdData($steamId, $fetchFriends))) {
                 // Cache in the database.
                 $repository->writeSteamIdStorage($steamIdStorage);
             }
@@ -83,6 +72,9 @@ class SteamId
 
         // Check local cache.
         if ($steamIdStorage = $repository->findOneBySteamId64($steamId64)) {
+            // Add friends if we don't have them yet.
+            $this->addFriends($steamIdStorage);
+
             return $steamIdStorage;
         }
         // Fetch remotely.
@@ -168,6 +160,31 @@ SQL;
         $results = $statement->fetchAll();
 
         return $results;
+    }
+
+    public function addFriends($steamIdStorage) {
+        $repository = $this->doctrine
+          ->getRepository('SteamBoatBundle:SteamIdStorage');
+
+        if (!count($steamIdStorage->getFriends())) {
+            $steamId = SteamIdFetcher::create(
+              $steamIdStorage->getSteamId64(), TRUE, TRUE);
+            $friends = $steamId->getFriends();
+            foreach ($friends as $friend) {
+                $exists = FALSE;
+                foreach ($steamIdStorage->getFriends() as $existingFriend) {
+                    if ($existingFriend->getSteamId64() == $friend->getSteamId64()) {
+                        $exists = TRUE;
+                    }
+                }
+                if (!$exists) {
+                    if ($friendSteamId = $this->findOneBySteamId64($friend->getSteamId64(), FALSE)) {
+                        $steamIdStorage->addFriend($friendSteamId);
+                    }
+                }
+            }
+            $repository->writeSteamIdStorage($steamIdStorage);
+        }
     }
 
 }

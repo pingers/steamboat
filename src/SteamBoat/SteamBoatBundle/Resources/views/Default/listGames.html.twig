@@ -7,16 +7,17 @@
         </a>
     </p>
     <p>
-    <table>
-{#{{ dump(steamId) }}#}
-        {% for game in games %}
-            <tr>
-                <td><a href="http://store.steampowered.com/app/{{ game.getAppId }}" target="_blank">
-                        <img src="{{ game.getLogoUrl }}" alt="{{ game.getName }}"/>
-                    </a></td>
-                <td></td>
-            </tr>
-        {% endfor %}
-    </table>
+        <table>
+            {% for game in games %}
+                <tr>
+                    <td>
+                        <a href="http://store.steampowered.com/app/{{ game.getAppId }}" target="_blank">
+                            <img src="{{ game.getLogoUrl }}" alt="{{ game.getName }}"/>
+                        </a>
+                    </td>
+                    <td><td/>
+                </tr>
+            {% endfor %}
+        </table>
     </p>
 {% endblock %}

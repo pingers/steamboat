@@ -7,30 +7,29 @@
         </a>
     </p>
     <p>
-    <table>
-        {% for friend in selectedFriends %}
-            <tr>
-                <td>
-                    {{ friend }}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    <table>
-{#{{ dump(steamId) }}#}
-        {% for game in commonGames %}
-            <tr>
-                <td>
-                    {{ game.game_id }}
-                </td>
-                <td>
-                    {{ game.name }}
-                </td>
-                <td>
-                    {{ game.count }}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+      <table>
+          {% for friend in selectedFriends %}
+              <tr>
+                  <td>
+                      {{ friend }}
+                  </td>
+              </tr>
+          {% endfor %}
+      </table>
+      <table>
+          {% for game in commonGames %}
+              <tr>
+                  <td>
+                      {{ game.game_id }}
+                  </td>
+                  <td>
+                      {{ game.name }}
+                  </td>
+                  <td>
+                      {{ game.count }}
+                  </td>
+              </tr>
+          {% endfor %}
+      </table>
     </p>
 {% endblock %}

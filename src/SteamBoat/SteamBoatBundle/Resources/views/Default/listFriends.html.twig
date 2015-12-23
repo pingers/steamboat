@@ -7,16 +7,17 @@
         </a>
     </p>
     <p>
-    <table>
-
-        {% for friend in friends %}
-            <tr>
-                <td><a href="http://store.steampowered.com/profiles/{{ friend.getId }}" target="_blank">
-                        {{ friend.getNickname }}
-                    </a></td>
-                <td></td>
-            </tr>
-        {% endfor %}
-    </table>
+        <table>
+            {% for friend in friends %}
+                <tr>
+                    <td>
+                        <a href="http://store.steampowered.com/profiles/{{ friend.getId }}" target="_blank">
+                            {{ friend.getNickname }}
+                        </a>
+                    </td>
+                    <td><td/>
+                </tr>
+            {% endfor %}
+        </table>
     </p>
 {% endblock %}

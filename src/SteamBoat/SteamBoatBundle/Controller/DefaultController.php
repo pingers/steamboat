@@ -46,6 +46,7 @@ class DefaultController extends Controller
         return $this->render('SteamBoatBundle:Default:listGames.html.twig', [
             'id' => $steamIdStorage,
             'games' => $steamIdStorage->getGames(),
+            'message' => '',
          ]);
     }
 
@@ -56,7 +57,7 @@ class DefaultController extends Controller
 
         $friends = $steamIdStorage->getFriends();
         $builder = $this->createFormBuilder()
-            ->add('Go', 'submit');
+            ->add('Find common games', 'submit');
 
         foreach ($friends as $friendIdStorage) {
             $builder->add($friendIdStorage->getSteamId64(), 'checkbox', [
@@ -77,11 +78,13 @@ class DefaultController extends Controller
                 'id' => $steamIdStorage,
                 'selectedFriends' => $selectedFriends,
                 'commonGames' => $commonGames,
+                'message' => '',
             ]);
         }
 
         return $this->render('SteamBoatBundle:Default:index.html.twig', [
             'form' => $form->createView(),
+            'message' => '',
         ]);
     }
 }

@@ -10,7 +10,9 @@
     <body>
         <h1>SteamBoat</h1>
         {% if navigation is defined %}
-            {{ knp_menu_render(navigation) }}
+            <div id="navigation">
+                {{ knp_menu_render(navigation) }}
+            </div>
         {% endif %}
         <div id="message">{% block message %}{% endblock %}</div>
         <div id="content">{% block content %}{% endblock %}</div>

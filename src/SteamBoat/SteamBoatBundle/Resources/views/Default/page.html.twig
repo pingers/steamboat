@@ -8,7 +8,10 @@
         {% endblock %}
     </head>
     <body>
-        <h1><a href="/">SteamBoat</a></h1>
+        <h1>SteamBoat</h1>
+        {% if navigation is defined %}
+            {{ knp_menu_render(navigation) }}
+        {% endif %}
         <div id="message">{% block message %}{% endblock %}</div>
         <div id="content">{% block content %}{% endblock %}</div>
         <div id="footer">

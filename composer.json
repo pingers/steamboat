@@ -18,7 +18,8 @@
         "sensio/distribution-bundle": "~3.0",
         "sensio/framework-extra-bundle": "~3.0",
         "sensio/generator-bundle": "~2.4",
-        "koraktor/steam-condenser": "dev-master"
+        "koraktor/steam-condenser": "dev-master",
+        "knplabs/knp-menu-bundle": "~2.1"
     },
     "scripts": {
         "post-install-cmd": [

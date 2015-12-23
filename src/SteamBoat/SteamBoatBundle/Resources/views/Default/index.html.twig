@@ -1,5 +1,9 @@
 {% extends "SteamBoatBundle:Default:page.html.twig" %}
 
+{% block message %}
+    {{ message }}
+{% endblock %}
+
 {% block content %}
     {{ form(form) }}
 {% endblock %}

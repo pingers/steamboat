@@ -2,15 +2,16 @@
 
 namespace SteamBoat\SteamBoatBundle\Controller;
 
+use SteamCondenser\Exceptions\SteamCondenserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, $nickname = '', $profileNotFound = '')
     {
         $form = $this->createFormBuilder()
-            ->add('nickname', 'text')
+            ->add('nickname', 'text', ['data' => $nickname])
             ->add('Go', 'submit')
             ->getForm();
 
@@ -18,21 +19,29 @@ class DefaultController extends Controller
 
         if ($form->isValid()) {
             $data = $form->getData();
-            return $this->redirect($this->generateUrl(
-                'steam_boat_list_games',
-                ['nickname' => $data['nickname']]
-            ));
+            return $this->redirectToRoute(
+              'steam_boat_list_games',
+              ['nickname' => $data['nickname']]
+            );
         }
 
         return $this->render('SteamBoatBundle:Default:index.html.twig', [
             'form' => $form->createView(),
+            'message' => $profileNotFound,
         ]);
     }
 
-    public function listGamesAction($nickname)
+    public function listGamesAction(Request $request, $nickname)
     {
         $steamId = $this->get('steam_boat.steamid');
-        $steamIdStorage = $steamId->findOneByNickname($nickname, TRUE);
+
+        try {
+            $steamIdStorage = $steamId->findOneByNickname($nickname, TRUE);
+        }
+        catch (SteamCondenserException $error) {
+            // Can't find a profile, show the form with an error message.
+            return $this->indexAction($request, $nickname, $error->getMessage());
+        }
 
         return $this->render('SteamBoatBundle:Default:listGames.html.twig', [
             'id' => $steamIdStorage,

@@ -1,23 +1,18 @@
 {% extends "SteamBoatBundle:Default:page.html.twig" %}
 
 {% block content %}
-    <p class="important">
+    <div class="profile-name">
         <a href="http://steamcommunity.com/profiles/{{ id.getSteamId64 }}">
             <span>{{ id.getNickname }}</span>
         </a>
-    </p>
-    <p>
-        <table>
-            {% for game in games %}
-                <tr>
-                    <td>
-                        <a href="http://store.steampowered.com/app/{{ game.getAppId }}" target="_blank">
-                            <img src="{{ game.getLogoUrl }}" alt="{{ game.getName }}"/>
-                        </a>
-                    </td>
-                    <td><td/>
-                </tr>
-            {% endfor %}
-        </table>
-    </p>
+    </div>
+    <div class="profile-games">
+        {% for game in games %}
+            <span class="profile-game">
+                <a href="http://store.steampowered.com/app/{{ game.getAppId }}" target="_blank">
+                    <img src="{{ game.getLogoUrl }}" alt="{{ game.getName }}"/>
+                </a>
+            </span>
+        {% endfor %}
+    </div>
 {% endblock %}

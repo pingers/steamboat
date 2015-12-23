@@ -3,7 +3,6 @@
 namespace SteamBoat\SteamBoatBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  * SteamIdStorageRepository
@@ -41,7 +40,7 @@ class SteamIdStorageRepository extends EntityRepository
     }
 
     /**
-     * @param $steamId
+     * @param $steamIdData
      * @return object|null
      */
     public function createSteamIdStorage($steamIdData) {

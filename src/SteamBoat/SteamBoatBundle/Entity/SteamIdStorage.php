@@ -10,10 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SteamIdStorage
 {
-    /**
-     * @var array
-     */
-    private static $steamIds = [];
 
     /**
      * @var string
@@ -220,7 +216,7 @@ class SteamIdStorage
         return $this->tradeBanState;
     }
     /**
-     * @var \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage
+     * @var SteamGameStorage
      */
     private $category;
 
@@ -228,10 +224,10 @@ class SteamIdStorage
     /**
      * Set category
      *
-     * @param \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $category
+     * @param SteamGameStorage $category
      * @return SteamIdStorage
      */
-    public function setCategory(\SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $category = null)
+    public function setCategory(SteamGameStorage $category = null)
     {
         $this->category = $category;
 
@@ -241,7 +237,7 @@ class SteamIdStorage
     /**
      * Get category
      *
-     * @return \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage
+     * @return SteamGameStorage
      */
     public function getCategory()
     {
@@ -251,10 +247,10 @@ class SteamIdStorage
     /**
      * Add games
      *
-     * @param \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $games
+     * @param SteamGameStorage $games
      * @return SteamIdStorage
      */
-    public function addGame(\SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $games)
+    public function addGame(SteamGameStorage $games)
     {
         $this->games[] = $games;
 
@@ -264,9 +260,9 @@ class SteamIdStorage
     /**
      * Remove games
      *
-     * @param \SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $games
+     * @param SteamGameStorage $games
      */
-    public function removeGame(\SteamBoat\SteamBoatBundle\Entity\SteamGameStorage $games)
+    public function removeGame(SteamGameStorage $games)
     {
         $this->games->removeElement($games);
     }
@@ -287,7 +283,7 @@ class SteamIdStorage
      * @param \SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $friends
      * @return SteamIdStorage
      */
-    public function addFriend(\SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $friends)
+    public function addFriend(SteamIdStorage $friends)
     {
         $this->friends[] = $friends;
 
@@ -299,7 +295,7 @@ class SteamIdStorage
      *
      * @param \SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $friends
      */
-    public function removeFriend(\SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $friends)
+    public function removeFriend(SteamIdStorage $friends)
     {
         $this->friends->removeElement($friends);
     }
@@ -313,4 +309,5 @@ class SteamIdStorage
     {
         return $this->friends;
     }
+
 }

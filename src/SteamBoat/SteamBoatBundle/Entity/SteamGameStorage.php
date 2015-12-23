@@ -2,6 +2,7 @@
 
 namespace SteamBoat\SteamBoatBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -118,16 +119,16 @@ class SteamGameStorage
      */
     public function __construct()
     {
-        $this->steamIdStorages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->steamIdStorages = new ArrayCollection();
     }
 
     /**
      * Add steamIdStorages
      *
-     * @param \SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $steamIdStorages
+     * @param SteamIdStorage $steamIdStorages
      * @return SteamGameStorage
      */
-    public function addSteamIdStorage(\SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $steamIdStorages)
+    public function addSteamIdStorage(SteamIdStorage $steamIdStorages)
     {
         $this->steamIdStorages[] = $steamIdStorages;
 
@@ -137,9 +138,9 @@ class SteamGameStorage
     /**
      * Remove steamIdStorages
      *
-     * @param \SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $steamIdStorages
+     * @param SteamIdStorage $steamIdStorages
      */
-    public function removeSteamIdStorage(\SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $steamIdStorages)
+    public function removeSteamIdStorage(SteamIdStorage $steamIdStorages)
     {
         $this->steamIdStorages->removeElement($steamIdStorages);
     }
@@ -162,10 +163,10 @@ class SteamGameStorage
     /**
      * Add steamIds
      *
-     * @param \SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $steamIds
+     * @param SteamIdStorage $steamIds
      * @return SteamGameStorage
      */
-    public function addSteamId(\SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $steamIds)
+    public function addSteamId(SteamIdStorage $steamIds)
     {
         $this->steamIds[] = $steamIds;
 
@@ -175,9 +176,9 @@ class SteamGameStorage
     /**
      * Remove steamIds
      *
-     * @param \SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $steamIds
+     * @param SteamIdStorage $steamIds
      */
-    public function removeSteamId(\SteamBoat\SteamBoatBundle\Entity\SteamIdStorage $steamIds)
+    public function removeSteamId(SteamIdStorage $steamIds)
     {
         $this->steamIds->removeElement($steamIds);
     }

@@ -32,8 +32,13 @@ class SteamGameStorageRepository extends EntityRepository
     }
 
     /**
-     * @param SteamGame $steamGame
+     * Saves Steam games.
+     *
+     * @param SteamGame $steamGameData
+     *   The Steam game to store.
+     *
      * @return SteamGameStorage
+     *   Doctrine storage entity.
      */
     public function createSteamGameStorage($steamGameData) {
         $steamGameStorage = new SteamGameStorage();
@@ -47,4 +52,5 @@ class SteamGameStorageRepository extends EntityRepository
         $entityManager->persist($steamGameStorage);
         return $steamGameStorage;
     }
+
 }
